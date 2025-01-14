@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { db } from '../config/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { translateWithGemini } from '../services/gemini';
 
 const VocabularyInput = () => {
   const [sentence, setSentence] = useState('');
@@ -6,43 +9,67 @@ const VocabularyInput = () => {
   const [wordMeaning, setWordMeaning] = useState('');
   const [sentenceMeaning, setSentenceMeaning] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleTranslate = async () => {
-    // Reset error
+    // Reset states
     setError('');
-
-    // Validate if word exists in sentence
-    if (!sentence.toLowerCase().includes(word.toLowerCase())) {
-      setError('Từ vựng không tồn tại trong câu!');
-      return;
-    }
+    setIsLoading(true);
 
     try {
-      // TODO: Implement Gemini API call here
-      // For now, we'll just set placeholder translations
-      setWordMeaning('Nghĩa của từ sẽ hiển thị ở đây');
-      setSentenceMeaning('Nghĩa của câu sẽ hiển thị ở đây');
+      // Validate if word exists in sentence
+      if (!sentence.toLowerCase().includes(word.toLowerCase())) {
+        setError('Từ vựng không tồn tại trong câu!');
+        return;
+      }
+
+      // Translate both word and sentence
+      const [wordTranslation, sentenceTranslation] = await Promise.all([
+        translateWithGemini(word, true),
+        translateWithGemini(sentence, false)
+      ]);
+
+      setWordMeaning(wordTranslation);
+      setSentenceMeaning(sentenceTranslation);
     } catch (err) {
       setError('Có lỗi xảy ra khi dịch. Vui lòng thử lại!');
+      console.error('Translation error:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSave = () => {
-    // TODO: Implement database save functionality
+  const handleSave = async () => {
     if (!sentence || !word || !wordMeaning || !sentenceMeaning) {
       setError('Vui lòng điền đầy đủ thông tin trước khi lưu!');
       return;
     }
-    
-    const vocabularyData = {
-      word,
-      wordMeaning,
-      context: sentence,
-      contextMeaning: sentenceMeaning,
-    };
-    
-    console.log('Saving data:', vocabularyData);
-    // TODO: Add actual database save logic
+
+    setIsLoading(true);
+    try {
+      const vocabularyData = {
+        word,
+        wordMeaning,
+        context: sentence,
+        contextMeaning: sentenceMeaning,
+        createdAt: new Date()
+      };
+
+      await addDoc(collection(db, 'vocabulary'), vocabularyData);
+      
+      // Clear form after successful save
+      setSentence('');
+      setWord('');
+      setWordMeaning('');
+      setSentenceMeaning('');
+      
+      alert('Lưu từ vựng thành công!');
+    } catch (err) {
+      setError('Có lỗi xảy ra khi lưu. Vui lòng thử lại!');
+      console.error('Save error:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,6 +82,7 @@ const VocabularyInput = () => {
           value={sentence}
           onChange={(e) => setSentence(e.target.value)}
           placeholder="Nhập câu tiếng Anh..."
+          disabled={isLoading}
         />
       </div>
 
@@ -65,10 +93,13 @@ const VocabularyInput = () => {
           value={word}
           onChange={(e) => setWord(e.target.value)}
           placeholder="Nhập từ vựng..."
+          disabled={isLoading}
         />
       </div>
 
-      <button onClick={handleTranslate}>Dịch</button>
+      <button onClick={handleTranslate} disabled={isLoading}>
+        {isLoading ? 'Đang dịch...' : 'Dịch'}
+      </button>
 
       <div className="input-group">
         <label>Nghĩa của từ:</label>
@@ -77,6 +108,7 @@ const VocabularyInput = () => {
           value={wordMeaning}
           onChange={(e) => setWordMeaning(e.target.value)}
           placeholder="Nghĩa của từ..."
+          disabled={isLoading}
         />
       </div>
 
@@ -86,10 +118,13 @@ const VocabularyInput = () => {
           value={sentenceMeaning}
           onChange={(e) => setSentenceMeaning(e.target.value)}
           placeholder="Nghĩa của câu..."
+          disabled={isLoading}
         />
       </div>
 
-      <button onClick={handleSave}>Lưu</button>
+      <button onClick={handleSave} disabled={isLoading}>
+        {isLoading ? 'Đang lưu...' : 'Lưu'}
+      </button>
 
       {error && <div className="error-message">{error}</div>}
     </div>
