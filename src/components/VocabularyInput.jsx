@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { db, auth } from '../config/firebase';
 import { collection, addDoc, doc } from 'firebase/firestore';
 import { translateWithGemini } from '../services/gemini';
+import { Link } from 'react-router-dom';
 import './VocabularyInput.css';
-
 
 const VocabularyInput = () => {
   const [sentence, setSentence] = useState('');
@@ -137,6 +137,10 @@ const VocabularyInput = () => {
       </button>
 
       {error && <div className="error-message">{error}</div>}
+
+      <div className="navigation-links">
+        <Link to="/review">Ôn Tập Từ Vựng</Link>
+      </div>
     </div>
   );
 };

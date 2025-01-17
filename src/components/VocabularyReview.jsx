@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../config/firebase';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import './VocabularyReview.css';
 
 const VocabularyReview = () => {
   const [vocabularies, setVocabularies] = useState([]);
@@ -113,6 +115,10 @@ const VocabularyReview = () => {
         </label>
       </div>
       {error && <div className="error-message">{error}</div>}
+
+      <div className="navigation-links">
+        <Link to="/">Nhập Từ Vựng</Link>
+      </div>
     </div>
   );
 };
