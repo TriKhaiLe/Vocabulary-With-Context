@@ -18,9 +18,20 @@
 ** Tab Authentication
 +Thông báo và redirect sau khi signup thành công
 
-** Tab danh nhập từ vựng:
+** Tab nhập từ vựng:
 +Chức năng logout
 +Phát âm/phiên âm từ vựng
++ Detect sai chính tả
+
+** Tab trang cá nhận kèm danh sách từ vựng:
++Tạo câu context có vần điệu để dễ nhớ.
+
+** Tab đấu trường (New):
++ Một room tối đa 3 người chơi sẽ thi đấu với nhau
++ Hình thức tương tự như ôn tập từ vựng, nhưng thay vì dựa trên bộ từ vựng riêng của mỗi learner, ứng dụng sẽ dùng Gemini tạo 10 từ kèm theo câu chứa nó. Độ khó được chọn ở room quyết định level độ khó của 10 từ vựng được tạo (các mức độ khó: a1,a2,b1,b2...)
++ 
+
+
 
 
 
