@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { db, auth } from '../config/firebase';
 import { collection, addDoc, doc } from 'firebase/firestore';
 import { translateWithGemini } from '../services/gemini';
+import './VocabularyInput.css';
+
 
 const VocabularyInput = () => {
   const [sentence, setSentence] = useState('');

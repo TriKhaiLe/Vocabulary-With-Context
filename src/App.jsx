@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import VocabularyInput from './components/VocabularyInput';
+import VocabularyReview from './components/VocabularyReview';
 import './App.css';
 
 // Protected Route Component
@@ -35,6 +36,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <VocabularyInput />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/review"
+            element={
+              <ProtectedRoute>
+                <VocabularyReview />
               </ProtectedRoute>
             }
           />
