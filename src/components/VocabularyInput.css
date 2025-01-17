@@ -2,6 +2,9 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .input-group {
@@ -51,4 +54,23 @@ button:hover {
   background-color: #ffe6e6;
   border-radius: 4px;
   border: 1px solid #ffcccc;
+}
+
+.navigation-links {
+  margin-top: 20px;
+}
+
+.navigation-links a {
+  text-decoration: none;
+  color: #4CAF50;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.navigation-links a:hover {
+  background-color: #4CAF50;
+  color: white;
 }
