@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { db } from '../config/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { db, auth } from '../config/firebase';
+import { collection, addDoc, doc } from 'firebase/firestore';
 import { translateWithGemini } from '../services/gemini';
 
 const VocabularyInput = () => {
@@ -47,15 +47,23 @@ const VocabularyInput = () => {
 
     setIsLoading(true);
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        setError('Bạn cần đăng nhập để lưu từ vựng!');
+        return;
+      }
+
       const vocabularyData = {
         word,
         wordMeaning,
         context: sentence,
         contextMeaning: sentenceMeaning,
-        createdAt: new Date()
+        createdAt: new Date(),
+        userId: user.uid
       };
 
-      await addDoc(collection(db, 'vocabulary'), vocabularyData);
+      const userDocRef = doc(db, 'users', user.uid);
+      await addDoc(collection(userDocRef, 'vocabulary'), vocabularyData);
       
       // Clear form after successful save
       setSentence('');

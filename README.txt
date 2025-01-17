@@ -11,7 +11,16 @@
 + Mỗi item gồm từ vựng, nghĩa tiếng việt, checkbox đổi context.
 + Nút đổi context được floating và luôn nằm ở góc phải dưới để có thể di chuyển theo khi cuộn. Khi ấn nút này tiến hành đổi context cho các từ vựng đó bằng API Gemini.
 
-** Tab đăng ký, đăng nhập cơ bản: sử dụng Firebase Authentication cho phép tạo tài khoản bằng email hoặc số điện thoại
+** Tab đăng ký, đăng nhập cơ bản: sử dụng Firebase Authentication
+
+
+***TODO:
+** Tab Authentication
++Thông báo và redirect sau khi signup thành công
+
+** Tab danh nhập từ vựng:
++Chức năng logout
++Phát âm/phiên âm từ vựng
 
 
 
