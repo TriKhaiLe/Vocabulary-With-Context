@@ -19,3 +19,18 @@ export const translateWithGemini = async (text, isWord = false) => {
     throw new Error('Failed to translate text');
   }
 };
+
+export const findNewContextWithGemini = async (word) => {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = `Find a new English sentence that contains the word "${word}". Provide only the sentence without any additional explanations.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error('Find new context error:', error);
+    throw new Error('Failed to find new context');
+  }
+};

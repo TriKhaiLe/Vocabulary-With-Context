@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../config/firebase';
 import { collection, query, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { translateWithGemini } from '../services/gemini';
+import { translateWithGemini, findNewContextWithGemini } from '../services/gemini';
 import './UserProfile.css';
 
 const UserProfile = () => {
@@ -73,7 +73,7 @@ const UserProfile = () => {
 
       const contextList = vocabularies.filter(vocab => vocab.inContextList);
       for (const vocab of contextList) {
-        const newContext = await translateWithGemini(vocab.word, false);
+        const newContext = await findNewContextWithGemini(vocab.word);
         const vocabDocRef = doc(db, 'users', user.uid, 'vocabulary', vocab.id);
         await updateDoc(vocabDocRef, { context: newContext });
       }
