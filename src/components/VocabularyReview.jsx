@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../config/firebase';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-import './VocabularyReview.css';
 
 const VocabularyReview = () => {
   const [vocabularies, setVocabularies] = useState([]);
@@ -9,6 +8,7 @@ const VocabularyReview = () => {
   const [selectedWord, setSelectedWord] = useState('');
   const [score, setScore] = useState(0);
   const [error, setError] = useState('');
+  const [loadingContextList, setLoadingContextList] = useState({});
 
   useEffect(() => {
     const fetchVocabularies = async () => {
@@ -35,19 +35,21 @@ const VocabularyReview = () => {
   const handleCheckAnswer = () => {
     const trimmedSelectedWord = selectedWord.trim().toLowerCase();
     const trimmedWord = vocabularies[currentIndex].word.trim().toLowerCase();
-  
+
     if (trimmedSelectedWord === trimmedWord) {
       setScore(score + 1);
       alert('Chính xác! Điểm của bạn: ' + (score + 1));
     } else {
       alert('Sai rồi! Từ đúng là: ' + vocabularies[currentIndex].word);
     }
-  
+
     setCurrentIndex(currentIndex + 1);
     setSelectedWord('');
   };
-  
-  const handleAddToContextList = async (vocabularyId) => {
+
+  const handleAddToContextList = async (vocabularyId, isChecked) => {
+    setLoadingContextList(prev => ({ ...prev, [vocabularyId]: true }));
+
     try {
       const user = auth.currentUser;
       if (!user) {
@@ -56,12 +58,19 @@ const VocabularyReview = () => {
       }
 
       const vocabDocRef = doc(db, 'users', user.uid, 'vocabulary', vocabularyId);
-      await updateDoc(vocabDocRef, { inContextList: true });
+      await updateDoc(vocabDocRef, { inContextList: isChecked });
 
-      alert('Đã thêm từ vựng vào danh sách đổi context!');
+      // Update local state after successful update
+      setVocabularies(prevVocabularies =>
+        prevVocabularies.map(vocab =>
+          vocab.id === vocabularyId ? { ...vocab, inContextList: isChecked } : vocab
+        )
+      );
     } catch (err) {
-      setError('Có lỗi xảy ra khi thêm từ vựng vào danh sách đổi context. Vui lòng thử lại!');
-      console.error('Add to context list error:', err);
+      setError('Có lỗi xảy ra khi cập nhật danh sách đổi context. Vui lòng thử lại!');
+      console.error('Update context list error:', err);
+    } finally {
+      setLoadingContextList(prev => ({ ...prev, [vocabularyId]: false }));
     }
   };
 
@@ -91,10 +100,15 @@ const VocabularyReview = () => {
       <button onClick={handleCheckAnswer}>Kiểm tra</button>
       <div className="context-list">
         <label>
-          <input
-            type="checkbox"
-            onChange={() => handleAddToContextList(currentVocab.id)}
-          />
+          {loadingContextList[currentVocab.id] ? (
+            <span className="loading-spinner">...</span>
+          ) : (
+            <input
+              type="checkbox"
+              checked={currentVocab.inContextList || false}
+              onChange={(e) => handleAddToContextList(currentVocab.id, e.target.checked)}
+            />
+          )}
           Thêm từ vựng này vào danh sách đổi context
         </label>
       </div>
