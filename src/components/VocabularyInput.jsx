@@ -10,8 +10,33 @@ const VocabularyInput = () => {
   const [word, setWord] = useState('');
   const [wordMeaning, setWordMeaning] = useState('');
   const [sentenceMeaning, setSentenceMeaning] = useState('');
+  const [phonetic, setPhonetic] = useState('');
+  const [audio, setAudio] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const checkSpelling = async (word) => {
+    try {
+      const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+      const data = await response.json();
+
+      if (data.title === "No Definitions Found") {
+        return { isValid: false, data: null };
+      }
+
+      const phonetic = data[0].phonetics.find(p => p.text && p.audio);
+      return {
+        isValid: true,
+        data: {
+          text: phonetic ? phonetic.text : '',
+          audio: phonetic ? phonetic.audio : ''
+        }
+      };
+    } catch (error) {
+      console.error('Spelling check error:', error);
+      return { isValid: false, data: null };
+    }
+  };
 
   const handleTranslate = async () => {
     // Reset states
@@ -25,6 +50,13 @@ const VocabularyInput = () => {
         return;
       }
 
+      // Check spelling
+      const spellingResult = await checkSpelling(word);
+      if (!spellingResult.isValid) {
+        setError('Từ vựng không hợp lệ hoặc sai chính tả!');
+        return;
+      }
+
       // Translate both word and sentence
       const [wordTranslation, sentenceTranslation] = await Promise.all([
         translateWithGemini(word, true),
@@ -33,6 +65,10 @@ const VocabularyInput = () => {
 
       setWordMeaning(wordTranslation);
       setSentenceMeaning(sentenceTranslation);
+
+      // Save phonetic and audio to state
+      setPhonetic(spellingResult.data.text);
+      setAudio(spellingResult.data.audio);
     } catch (err) {
       setError('Có lỗi xảy ra khi dịch. Vui lòng thử lại!');
       console.error('Translation error:', err);
@@ -60,6 +96,8 @@ const VocabularyInput = () => {
         wordMeaning,
         context: sentence,
         contextMeaning: sentenceMeaning,
+        phonetic,
+        audio,
         createdAt: new Date(),
         userId: user.uid
       };
@@ -72,6 +110,8 @@ const VocabularyInput = () => {
       setWord('');
       setWordMeaning('');
       setSentenceMeaning('');
+      setPhonetic('');
+      setAudio('');
       
       alert('Lưu từ vựng thành công!');
     } catch (err) {
@@ -131,6 +171,16 @@ const VocabularyInput = () => {
           disabled={isLoading}
         />
       </div>
+
+      {audio && (
+        <div className="input-group">
+          <label>Phát âm:</label>
+          <audio controls>
+            <source src={audio} type="audio/mpeg" />
+            Trình duyệt của bạn không hỗ trợ thẻ audio.
+          </audio>
+        </div>
+      )}
 
       <button onClick={handleSave} disabled={isLoading}>
         {isLoading ? 'Đang lưu...' : 'Lưu'}

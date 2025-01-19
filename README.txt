@@ -21,7 +21,8 @@
 ** Tab nhập từ vựng:
 +Chức năng logout
 +Phát âm/phiên âm từ vựng
-+ Detect sai chính tả
++* Detect sai chính tả
++ cho gemini giải thích nhiều hơn về ý nghĩa từ vựng đó trong câu
 
 ** Tab trang cá nhận kèm danh sách từ vựng:
 +Tạo câu context có vần điệu để dễ nhớ.
