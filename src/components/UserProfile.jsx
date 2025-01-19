@@ -94,6 +94,17 @@ const UserProfile = () => {
         {vocabularies.sort((a, b) => a.word.localeCompare(b.word)).map(vocab => (
           <div key={vocab.id} className="vocabulary-item">
             <p><strong>{vocab.word}</strong>: {vocab.wordMeaning}</p>
+            <p><em>Context:</em> {vocab.context}</p>
+            <p><em>Nghĩa của câu:</em> {vocab.contextMeaning}</p>
+            {vocab.audio && (
+              <div>
+                <label>Phát âm:</label>
+                <audio controls>
+                  <source src={vocab.audio} type="audio/mpeg" />
+                  Trình duyệt của bạn không hỗ trợ thẻ audio.
+                </audio>
+              </div>
+            )}
             <label>
               {loadingContextList[vocab.id] ? (
                 <span className="loading-spinner">...</span>
