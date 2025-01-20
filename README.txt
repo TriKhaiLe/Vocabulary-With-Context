@@ -28,6 +28,7 @@
 
 ** Tab trang cá nhận kèm danh sách từ vựng:
 +Tạo câu context có vần điệu để dễ nhớ.
++ Bug: đổi context mà chưa đổi nghĩa 
 
 ** Tab đấu trường (New):
 + Một room tối đa 3 người chơi sẽ thi đấu với nhau

@@ -70,21 +70,22 @@ const UserProfile = () => {
         setError('Bạn cần đăng nhập để đổi context!');
         return;
       }
-
+  
       const contextList = vocabularies.filter(vocab => vocab.inContextList);
       for (const vocab of contextList) {
         const newContext = await findNewContextWithGemini(vocab.word);
+        const newContextMeaning = await translateWithGemini(newContext, false);
         const vocabDocRef = doc(db, 'users', user.uid, 'vocabulary', vocab.id);
-        await updateDoc(vocabDocRef, { context: newContext });
+        await updateDoc(vocabDocRef, { context: newContext, contextMeaning: newContextMeaning });
       }
-
+  
       alert('Đổi context thành công!');
     } catch (err) {
       setError('Có lỗi xảy ra khi đổi context. Vui lòng thử lại!');
       console.error('Change context error:', err);
     }
   };
-
+  
   return (
     <div className="user-profile">
       <h2>Trang Cá Nhân</h2>
