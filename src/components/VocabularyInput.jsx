@@ -14,6 +14,7 @@ const VocabularyInput = () => {
   const [audio, setAudio] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isPhraseMode, setIsPhraseMode] = useState(false);
 
   const checkSpelling = async (word) => {
     try {
@@ -50,11 +51,17 @@ const VocabularyInput = () => {
         return;
       }
 
-      // Check spelling
-      const spellingResult = await checkSpelling(word);
-      if (!spellingResult.isValid) {
-        setError('Từ vựng không hợp lệ hoặc sai chính tả!');
-        return;
+      if (!isPhraseMode) {
+        // Check spelling
+        const spellingResult = await checkSpelling(word);
+        if (!spellingResult.isValid) {
+          setError('Từ vựng không hợp lệ hoặc sai chính tả!');
+          return;
+        }
+
+        // Save phonetic and audio to state
+        setPhonetic(spellingResult.data.text);
+        setAudio(spellingResult.data.audio);
       }
 
       // Translate both word and sentence
@@ -65,10 +72,6 @@ const VocabularyInput = () => {
 
       setWordMeaning(wordTranslation);
       setSentenceMeaning(sentenceTranslation);
-
-      // Save phonetic and audio to state
-      setPhonetic(spellingResult.data.text);
-      setAudio(spellingResult.data.audio);
     } catch (err) {
       setError('Có lỗi xảy ra khi dịch. Vui lòng thử lại!');
       console.error('Translation error:', err);
@@ -96,8 +99,8 @@ const VocabularyInput = () => {
         wordMeaning,
         context: sentence,
         contextMeaning: sentenceMeaning,
-        phonetic,
-        audio,
+        phonetic: isPhraseMode ? '' : phonetic,
+        audio: isPhraseMode ? '' : audio,
         createdAt: new Date(),
         userId: user.uid
       };
@@ -147,6 +150,17 @@ const VocabularyInput = () => {
         />
       </div>
 
+      <div className="input-group">
+        <label>
+          <input
+            type="checkbox"
+            checked={isPhraseMode}
+            onChange={(e) => setIsPhraseMode(e.target.checked)}
+          />
+          Chế độ nhập cụm từ
+        </label>
+      </div>
+
       <button onClick={handleTranslate} disabled={isLoading}>
         {isLoading ? 'Đang dịch...' : 'Dịch'}
       </button>
@@ -172,7 +186,7 @@ const VocabularyInput = () => {
         />
       </div>
 
-      {audio && (
+      {audio && !isPhraseMode && (
         <div className="input-group">
           <label>Phát âm:</label>
           <audio controls>

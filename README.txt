@@ -19,6 +19,8 @@
 +Thông báo và redirect sau khi signup thành công
 
 ** Tab nhập từ vựng:
++ chế độ nhập phrase
+
 +Chức năng logout
 +Phát âm/phiên âm từ vựng
 +* Detect sai chính tả
