@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { db, auth } from '../config/firebase';
 import { collection, query, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { translateWithGemini, findNewContextWithGemini } from '../services/gemini';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import './UserProfile.css';
 
 const UserProfile = () => {
@@ -70,7 +72,7 @@ const UserProfile = () => {
         setError('Bạn cần đăng nhập để đổi context!');
         return;
       }
-  
+
       const contextList = vocabularies.filter(vocab => vocab.inContextList);
       for (const vocab of contextList) {
         const newContext = await findNewContextWithGemini(vocab.word);
@@ -78,14 +80,19 @@ const UserProfile = () => {
         const vocabDocRef = doc(db, 'users', user.uid, 'vocabulary', vocab.id);
         await updateDoc(vocabDocRef, { context: newContext, contextMeaning: newContextMeaning });
       }
-  
+
       alert('Đổi context thành công!');
     } catch (err) {
       setError('Có lỗi xảy ra khi đổi context. Vui lòng thử lại!');
       console.error('Change context error:', err);
     }
   };
-  
+
+  const playAudio = (audioSrc) => {
+    const audio = new Audio(audioSrc);
+    audio.play();
+  };
+
   return (
     <div className="user-profile">
       <h2>Trang Cá Nhân</h2>
@@ -94,18 +101,19 @@ const UserProfile = () => {
       <div className="vocabulary-list">
         {vocabularies.sort((a, b) => a.word.localeCompare(b.word)).map(vocab => (
           <div key={vocab.id} className="vocabulary-item">
-            <p><strong>{vocab.word}</strong>: {vocab.wordMeaning}</p>
-            <p><em>Context:</em> {vocab.context}</p>
-            <p><em>Nghĩa của câu:</em> {vocab.contextMeaning}</p>
-            {vocab.audio && (
-              <div>
-                <label>Phát âm:</label>
-                <audio controls>
-                  <source src={vocab.audio} type="audio/mpeg" />
-                  Trình duyệt của bạn không hỗ trợ thẻ audio.
-                </audio>
-              </div>
-            )}
+            <div className="word">
+              {vocab.word}
+              {vocab.audio && (
+                <FontAwesomeIcon
+                  icon={faPlay}
+                  onClick={() => playAudio(vocab.audio)}
+                  className="audio-icon"
+                />
+              )}
+            </div>
+            <p><strong>Nghĩa:</strong> {vocab.wordMeaning}</p>
+            <p><strong>Context:</strong> {vocab.context}</p>
+            <p><strong>Nghĩa của câu:</strong> {vocab.contextMeaning}</p>
             <label>
               {loadingContextList[vocab.id] ? (
                 <span className="loading-spinner">...</span>

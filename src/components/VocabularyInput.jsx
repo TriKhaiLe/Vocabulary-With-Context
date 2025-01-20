@@ -4,6 +4,7 @@ import { collection, addDoc, doc } from 'firebase/firestore';
 import { translateWithGemini } from '../services/gemini';
 import { Link } from 'react-router-dom';
 import './VocabularyInput.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const VocabularyInput = () => {
   const [sentence, setSentence] = useState('');
@@ -196,7 +197,7 @@ const VocabularyInput = () => {
         </div>
       )}
 
-      <button onClick={handleSave} disabled={isLoading}>
+      <button className="btn btn-primary" onClick={handleSave} disabled={isLoading}>
         {isLoading ? 'Đang lưu...' : 'Lưu'}
       </button>
 

@@ -2,33 +2,45 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  background: white;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: 'Roboto', sans-serif;
+  color: #333;
 }
 
 .input-group {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .input-group label {
-  display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #333;
 }
 
 .input-group input,
 .input-group textarea {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 16px;
+  background-color: #ffffff;
+  color: #333;
+  transition: border-color 0.3s, background-color 0.3s;
 }
 
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: #007BFF;
+  background-color: #ffffff;
+  outline: none;
+}
 .input-group textarea {
-  min-height: 80px;
+  min-height: 100px;
   resize: vertical;
 }
 

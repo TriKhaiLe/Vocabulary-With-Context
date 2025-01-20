@@ -1,69 +1,25 @@
 .vocabulary-review {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background: linear-gradient(135deg, #2c3e50 0%, #4CAF50 100%);
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color: white;
-  font-family: 'Poppins', sans-serif;
-}
-
-.vocabulary-review h2 {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.sentence {
-  margin-bottom: 20px;
-  font-size: 1.2rem;
-}
-
-.input-group {
-  margin-bottom: 20px;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
   color: #333;
 }
 
-button {
-  background: linear-gradient(135deg, #4CAF50 0%, #2c3e50 100%);
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 10px;
-  margin-bottom: 20px;
-  font-size: 16px;
-  transition: all 0.3s ease;
+.vocabulary-item {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-button:hover {
-  background: linear-gradient(135deg, #45a049 0%, #1e2e3e 100%);
-  transform: scale(1.05);
-}
-
-.error-message {
-  color: #ff0000;
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #ffe6e6;
-  border-radius: 4px;
-  border: 1px solid #ffcccc;
+.vocabulary-item p {
+  margin: 0;
+  color: #333;
 }
 
 .navigation-links {
@@ -72,7 +28,7 @@ button:hover {
 
 .navigation-links a {
   text-decoration: none;
-  color: #4CAF50;
+  color: #007BFF;
   font-weight: bold;
   padding: 0.5rem 1rem;
   border: 2px solid transparent;
@@ -81,7 +37,7 @@ button:hover {
 }
 
 .navigation-links a:hover {
-  background-color: #4CAF50;
+  background-color: #007BFF;
   color: white;
 }
 
@@ -95,7 +51,11 @@ button:hover {
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.error-message {
+  color: #ff0000;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ffe6e6;
+  border-radius: 4px;
+  border: 1px solid #ffcccc;
 }
