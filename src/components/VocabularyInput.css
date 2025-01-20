@@ -5,6 +5,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
 }
 
 .input-group {
@@ -32,7 +33,7 @@
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: #007BFF;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -44,7 +45,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
 }
 
 .error-message {
@@ -62,7 +63,7 @@ button:hover {
 
 .navigation-links a {
   text-decoration: none;
-  color: #4CAF50;
+  color: #007BFF;
   font-weight: bold;
   padding: 0.5rem 1rem;
   border: 2px solid transparent;
@@ -71,6 +72,6 @@ button:hover {
 }
 
 .navigation-links a:hover {
-  background-color: #4CAF50;
+  background-color: #007BFF;
   color: white;
 }

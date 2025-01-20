@@ -5,6 +5,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
 }
 
 .vocabulary-list {
@@ -13,8 +14,8 @@
 
 .vocabulary-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 10px;
   border-bottom: 1px solid #ccc;
 }
@@ -27,7 +28,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #4CAF50;
+  background-color: #007BFF;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -37,7 +38,7 @@
 }
 
 .change-context-btn:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
 }
 
 .loading-spinner {

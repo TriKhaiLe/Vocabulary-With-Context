@@ -3,6 +3,8 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #f9f9f9;
+  font-family: 'Roboto', sans-serif;
 }
 
 nav {
@@ -14,7 +16,7 @@ nav {
 
 nav a {
   text-decoration: none;
-  color: #4CAF50;
+  color: #007BFF;
   font-weight: bold;
   padding: 0.5rem 1rem;
   border: 2px solid transparent;
@@ -25,12 +27,12 @@ nav a {
 }
 
 nav a:hover {
-  background-color: #4CAF50;
+  background-color: #007BFF;
   color: white;
 }
 
 nav a.active {
-  background-color: #4CAF50;
+  background-color: #007BFF;
   color: white;
 }
 
@@ -40,7 +42,7 @@ nav a .icon {
 
 .loading {
   font-size: 1.5rem;
-  color: #4CAF50;
+  color: #007BFF;
 }
 
 .error-message {
