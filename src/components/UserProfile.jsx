@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../config/firebase';
-import { collection, query, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { translateWithGemini, findNewContextWithGemini } from '../services/gemini';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -26,9 +26,14 @@ const UserProfile = () => {
         const vocabList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setVocabularies(vocabList);
 
-        // Calculate total score
-        const totalScore = vocabList.length; // Assuming each vocabulary item gives 1 point
-        setScore(totalScore);
+        const scoreDocRef = doc(db, 'users', user.uid, 'scores', 'total');
+        const scoreDoc = await getDoc(scoreDocRef);
+  
+        if (scoreDoc.exists()) {
+          setScore(scoreDoc.data().points || 0);
+        } else {
+          setScore(0);
+        }
       } catch (err) {
         setError('Có lỗi xảy ra khi tải từ vựng. Vui lòng thử lại!');
         console.error('Fetch error:', err);

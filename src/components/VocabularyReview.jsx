@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from '../config/firebase';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import './VocabularyReview.css';
 
@@ -11,6 +11,8 @@ const VocabularyReview = () => {
   const [score, setScore] = useState(0);
   const [error, setError] = useState('');
   const [loadingContextList, setLoadingContextList] = useState({});
+  const [scoreDocRef, setScoreDocRef] = useState(null);
+  const [currentPoints, setCurrentPoints] = useState(0);
 
   useEffect(() => {
     const fetchVocabularies = async () => {
@@ -20,27 +22,50 @@ const VocabularyReview = () => {
           setError('Bạn cần đăng nhập để ôn tập từ vựng!');
           return;
         }
-
+    
         const q = query(collection(db, 'users', user.uid, 'vocabulary'));
         const querySnapshot = await getDocs(q);
         const vocabList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setVocabularies(vocabList);
+    
+        const scoreRef = doc(db, 'users', user.uid, 'scores', 'total');
+        const scoreDoc = await getDoc(scoreRef);
+    
+        if (!scoreDoc.exists()) {
+          await setDoc(scoreRef, { points: 0 });
+          setCurrentPoints(0);
+        } else {
+          setCurrentPoints(scoreDoc.data().points);
+        }
+
+        setScoreDocRef(scoreRef);
+    
       } catch (err) {
         setError('Có lỗi xảy ra khi tải từ vựng. Vui lòng thử lại!');
         console.error('Fetch error:', err);
       }
     };
-
+    
     fetchVocabularies();
-  }, []);
+    }, []);
 
-  const handleCheckAnswer = () => {
+  const handleCheckAnswer = async () => {
     const trimmedSelectedWord = selectedWord.trim().toLowerCase();
     const trimmedWord = vocabularies[currentIndex].word.trim().toLowerCase();
 
     if (trimmedSelectedWord === trimmedWord) {
       setScore(score + 1);
       alert('Chính xác! Điểm của bạn: ' + (score + 1));
+
+      if (scoreDocRef) {
+        try {
+          await setDoc(scoreDocRef, { points: currentPoints + 1 }, { merge: true });        
+          setCurrentPoints(currentPoints + 1);
+        } catch (err) {
+          console.error('Lỗi khi cập nhật điểm số:', err);
+        }
+      }
+
     } else {
       alert('Sai rồi! Từ đúng là: ' + vocabularies[currentIndex].word);
     }
