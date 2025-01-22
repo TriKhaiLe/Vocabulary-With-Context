@@ -15,6 +15,9 @@
 
 
 ***TODO:
+** Tab ôn tập từ vựng:
++ Đổi thứ tự ôn tập random, hoặc thêm điểm cho từng từ vựng và ưu tiên hiển thị ôn tập từ điểm thấp nhất 
+
 ** Tab Authentication
 +Thông báo và redirect sau khi signup thành công
 

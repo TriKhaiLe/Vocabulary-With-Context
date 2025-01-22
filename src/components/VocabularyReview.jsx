@@ -15,6 +15,14 @@ const VocabularyReview = () => {
   const [currentPoints, setCurrentPoints] = useState(0);
 
   useEffect(() => {
+    const shuffleArray = (array) => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
+
     const fetchVocabularies = async () => {
       try {
         const user = auth.currentUser;
@@ -25,7 +33,8 @@ const VocabularyReview = () => {
     
         const q = query(collection(db, 'users', user.uid, 'vocabulary'));
         const querySnapshot = await getDocs(q);
-        const vocabList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let vocabList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        vocabList = shuffleArray(vocabList);        
         setVocabularies(vocabList);
     
         const scoreRef = doc(db, 'users', user.uid, 'scores', 'total');
