@@ -131,6 +131,11 @@ const VocabularyReview = () => {
           value={selectedWord}
           onChange={(e) => setSelectedWord(e.target.value)}
           placeholder="Nhập từ vựng..."
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleCheckAnswer();
+            }
+          }}        
         />
       </div>
       <button onClick={handleCheckAnswer}>Kiểm tra</button>
