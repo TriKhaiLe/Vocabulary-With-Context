@@ -95,8 +95,9 @@ const VocabularyInput = () => {
         return;
       }
 
+      const trimmedWord = word.trim();
       const vocabularyData = {
-        word,
+        trimmedWord,
         wordMeaning,
         context: sentence,
         contextMeaning: sentenceMeaning,
